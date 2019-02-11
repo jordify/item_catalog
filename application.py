@@ -1,0 +1,59 @@
+from flask import (
+    Flask, redirect, render_template, request, url_for, flash, jsonify, g
+)
+
+from models import User, Category, Item
+from sqlalchemy import create_engine, desc
+from sqlalchemy.orm import sessionmaker
+
+engine = create_engine('sqlite:///catalog.db')
+DBSession = sessionmaker(bind=engine)
+
+app = Flask(__name__)
+
+@app.route('/')
+@app.route('/catalog/')
+def index():
+  """Show all of the categories and the last 10 items created."""
+  session = DBSession()
+  categories = session.query(Category)
+  items = session.query(Item).order_by(desc(Item.time_created)).limit(10).all()
+  return render_template('index.html', categories=categories, items=items)
+
+@app.route('/newItem/', methods=['GET', 'POST'])
+def newItem():
+  """Allow logged-in users to make a new item"""
+  if request.method=='POST':
+    session = DBSession()
+    category_id = createNewCategory(request.form['category'])
+    newItem = Item(
+        name=request.form['name'],
+        description=request.form['description'],
+        category_id=category_id
+    )
+    session.add(newItem)
+    session.commit()
+    flash('New item, %s, created!' % (newItem.name))
+    return redirect(url_for('index'))
+  else:
+    return render_template('newItem.html')
+
+
+def createNewCategory(categoryName):
+  """Check if categoryName exists, create a new category if not.
+  Returns category ID"""
+  session = DBSession()
+  category = session.query(Category).filter_by(name=categoryName).limit(1).all()
+  if not category:
+    category = Category(name=categoryName)
+    session.add(category)
+    session.commit()
+    return category.id
+  else:
+    return category[0].id
+
+
+if __name__=='__main__':
+  app.debug = True
+  app.secret_key = 'debug'
+  app.run(host='0.0.0.0', port=5000)

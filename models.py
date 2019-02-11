@@ -1,11 +1,14 @@
 import random, string
 
-from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy import (
+    Column, Integer, String, DateTime, ForeignKey, create_engine, func
+)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from passlib.apps import custom_app_context as pwd_context
-from itsdangerous import (TimedJSONWebSignatureSerializer as \
-    Serializer, BadSignature, SignatureExpired)
+from itsdangerous import (
+    TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
+)
 
 Base = declarative_base()
 secret_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase \
@@ -30,7 +33,9 @@ class Item(Base):
   id = Column(Integer, primary_key=True)
   name = Column(String(80), nullable=False)
   description = Column(String(500))
-  category_id = Column(Integer, ForeignKey('catalog.id'))
+  time_created = Column(DateTime, server_default=func.now())
+  time_updated = Column(DateTime, onupdate=func.now())
+  category_id = Column(Integer, ForeignKey('category.id'))
   category = relationship(Category)
 
   @property
@@ -39,6 +44,8 @@ class Item(Base):
         'name': self.name,
         'id': self.id,
         'description': self.description,
+        'time_created': self.time_created,
+        'time_updated': self.time_updated,
         'category_id': self.category_id
     }
 

@@ -36,10 +36,15 @@ The application should also provide a JSON endpoint which, at the least, describ
    - `README` file includes details of all the steps required to successfully run the application
 
 ## To Do
-- [ ] Database build
-- [ ] Flask Build
+- [x] Database build
+- [x] Flask Build: Create Item
+- [ ] Flask Build: View Category
+- [ ] Flask Build: View Item
+- [ ] Flask Build: Edit Item
+- [ ] Flask Build: Delete Item
+- [ ] Flask Build: Delete Category
 - [ ] CSS Dev
-- [ ] HTML build
+- [ ] HTML rebuild
 - [ ] API Dev
 - [ ] User Auth
 - [ ] User Auth Alternative Service
