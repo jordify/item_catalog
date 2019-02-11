@@ -1,8 +1,8 @@
-#Item Catalog
-##Overview
-##Quick Start Guide
-##Background
-####Problem Statement
+# Item Catalog
+## Overview
+## Quick Start Guide
+## Background
+#### Problem Statement
 Develop an application that lists items of various categories and has a user 
 authentication system leverging OAuth and Flask.
 
@@ -12,7 +12,7 @@ should show specific information about that item.
 Authenticated users should have the ability to add, update, or delete items. 
 
 The application should also provide a JSON endpoint which, at the least, describes all items in the catalog.
-####Rubric items
+#### Rubric items
 1. API Endpoints
    - Criteria: Does the project implement a JSON endpoint with all required content?
    - Spec: Implements a JSON endpoint that serves the same information as displayed in the HTML endpoints for an arbitrary item in the catalog
@@ -35,7 +35,7 @@ The application should also provide a JSON endpoint which, at the least, describ
 9. Documentation
    - `README` file includes details of all the steps required to successfully run the application
 
-##To Do
+## To Do
 - [ ] Database build
 - [ ] Flask Build
 - [ ] CSS Dev
