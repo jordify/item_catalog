@@ -38,7 +38,7 @@ The application should also provide a JSON endpoint which, at the least, describ
 ## To Do
 - [x] Database build
 - [x] Flask Build: Create Item
-- [ ] Flask Build: View Category
+- [x] Flask Build: View Category
 - [x] Flask Build: View Item
 - [x] Flask Build: Edit Item
 - [ ] Flask Build: Delete Item
@@ -49,4 +49,4 @@ The application should also provide a JSON endpoint which, at the least, describ
 - [ ] User Auth
 - [ ] User Auth Alternative Service
 - [ ] Write README Quick Start Guide
-- [ ] Comment Code
+- [ ] Comment Cleanup

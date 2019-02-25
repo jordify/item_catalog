@@ -38,6 +38,15 @@ def newItem():
   else:
     return render_template('newItem.html')
 
+@app.route('/catalog/<string:categoryName>', methods=['GET'])
+def categoryListing(categoryName):
+  if request.method=='GET':
+    session = DBSession()
+    category = session.query(Category).filter_by(name=categoryName).one()
+    items = session.query(Item).filter_by(category_id=category.id).order_by(desc(Item.time_created)).all()
+    return render_template('category.html', category=category, items=items)
+  else:
+    return redirect(url_for('index'))
 
 @app.route('/catalog/<string:categoryName>/<string:itemName>', methods=['GET'])
 def itemListing(itemName, categoryName):
