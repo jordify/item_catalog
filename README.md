@@ -41,10 +41,12 @@ The application should also provide a JSON endpoint which, at the least, describ
 - [x] Flask Build: View Category
 - [x] Flask Build: View Item
 - [x] Flask Build: Edit Item
-- [ ] Flask Build: Delete Item
-- [ ] Flask Build: Delete Category
+- [x] Flask Build: Delete Item
+- [x] Flask Build: Delete Category
 - [ ] CSS Dev
 - [ ] HTML rebuild
+- [ ] <datalist> implementation
+- [ ] Flask Build: auto delete category when orphaned
 - [ ] API Dev
 - [ ] User Auth
 - [ ] User Auth Alternative Service

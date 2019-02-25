@@ -33,7 +33,7 @@ def newItem():
     )
     session.add(newItem)
     session.commit()
-    flash('New item, %s, created!' % (newItem.name))
+    flash('New item, %s, created!' % (newItem.name,))
     return redirect(url_for('index'))
   else:
     return render_template('newItem.html')
@@ -76,10 +76,39 @@ def editItem(itemName, categoryName):
       editItem.category_id = category.id
     session.add(editItem)
     session.commit()
-    flash('Item Edited')
+    flash('Item, %s, edited!' % (editItem.name,))
     return redirect(url_for('itemListing', categoryName=editItem.category.name, itemName=editItem.name))
   else:
     return redirect(url_for('index'))
+
+
+@app.route('/catalog/<string:categoryName>/<string:itemName>/delete', methods=['GET', 'POST'])
+def deleteItem(itemName, categoryName):
+  """Deletes an item. Logged in users only!"""
+  session = DBSession()
+  deleteItem = session.query(Item).filter_by(name=itemName).one()
+  if request.method=='POST':
+    session.delete(deleteItem)
+    session.commit()
+    flash('Item, %s, deleted!' % (deleteItem.name,))
+    return redirect(url_for('index'))
+  else:
+    return render_template('deleteItem.html', item=deleteItem)
+
+
+@app.route('/catalog/<string:categoryName>/delete', methods=['GET', 'POST'])
+def deleteCategory(categoryName):
+  """Deletes a category. Should check for items in category or happen
+  automatically. Logged in users only!"""
+  session = DBSession()
+  deleteCategory = session.query(Category).filter_by(name=categoryName).one()
+  if request.method=='POST':
+    session.delete(deleteCategory)
+    session.commit()
+    flash('Category, %s, deleted!' % (deleteCategory.name,))
+    return redirect(url_for('index'))
+  else:
+    return render_template('deleteCategory.html', category=deleteCategory)
 
 
 def createNewCategory(categoryName):
