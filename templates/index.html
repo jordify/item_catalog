@@ -34,7 +34,7 @@
       <div>
       {% for item in items %}
         <h3>
-        <a href='#'>{{ item.name }}</a>
+        <a href='{{ url_for('itemListing', categoryName=item.category.name, itemName=item.name) }}'>{{ item.name }}</a>
         </h3>
       {% endfor %}
     {% endif %}

@@ -39,6 +39,40 @@ def newItem():
     return render_template('newItem.html')
 
 
+@app.route('/catalog/<string:categoryName>/<string:itemName>', methods=['GET'])
+def itemListing(itemName, categoryName):
+  if request.method=='GET':
+    session = DBSession()
+    item = session.query(Item).filter_by(name=itemName).one()
+    return render_template('item.html', item=item)
+  else:
+    return redirect(url_for('index'))
+
+
+@app.route('/catalog/<string:categoryName>/<string:itemName>/edit', methods=['GET', 'POST'])
+def editItem(itemName, categoryName):
+  """Allow logged-in users to edit an existing item"""
+  session = DBSession()
+  categories = session.query(Category)
+  editItem = session.query(Item).filter_by(name=itemName).one()
+  if request.method=='GET':
+    return render_template('editItem.html', categories=categories, item=editItem)
+  elif request.method=='POST':
+    if request.form['name']:
+      editItem.name = request.form['name']
+    if request.form['description']:
+      editItem.description = request.form['description']
+    if request.form.get('categoryName'):
+      category = session.query(Category).filter_by(name=request.form['categoryName']).one()
+      editItem.category_id = category.id
+    session.add(editItem)
+    session.commit()
+    flash('Item Edited')
+    return redirect(url_for('itemListing', categoryName=editItem.category.name, itemName=editItem.name))
+  else:
+    return redirect(url_for('index'))
+
+
 def createNewCategory(categoryName):
   """Check if categoryName exists, create a new category if not.
   Returns category ID"""

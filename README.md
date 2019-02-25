@@ -39,8 +39,8 @@ The application should also provide a JSON endpoint which, at the least, describ
 - [x] Database build
 - [x] Flask Build: Create Item
 - [ ] Flask Build: View Category
-- [ ] Flask Build: View Item
-- [ ] Flask Build: Edit Item
+- [x] Flask Build: View Item
+- [x] Flask Build: Edit Item
 - [ ] Flask Build: Delete Item
 - [ ] Flask Build: Delete Category
 - [ ] CSS Dev
