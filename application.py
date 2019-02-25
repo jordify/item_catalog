@@ -20,6 +20,22 @@ def index():
   items = session.query(Item).order_by(desc(Item.time_created)).limit(10).all()
   return render_template('index.html', categories=categories, items=items)
 
+
+@app.route('/catalog/<string:categoryName>')
+def categoryListing(categoryName):
+  session = DBSession()
+  category = session.query(Category).filter_by(name=categoryName).one()
+  items = session.query(Item).filter_by(category_id=category.id).order_by(desc(Item.time_created)).all()
+  return render_template('category.html', category=category, items=items)
+
+
+@app.route('/catalog/<string:categoryName>/<string:itemName>')
+def itemListing(itemName, categoryName):
+  session = DBSession()
+  item = session.query(Item).filter_by(name=itemName).one()
+  return render_template('item.html', item=item)
+
+
 @app.route('/newItem/', methods=['GET', 'POST'])
 def newItem():
   """Allow logged-in users to make a new item"""
@@ -38,25 +54,6 @@ def newItem():
   else:
     return render_template('newItem.html')
 
-@app.route('/catalog/<string:categoryName>', methods=['GET'])
-def categoryListing(categoryName):
-  if request.method=='GET':
-    session = DBSession()
-    category = session.query(Category).filter_by(name=categoryName).one()
-    items = session.query(Item).filter_by(category_id=category.id).order_by(desc(Item.time_created)).all()
-    return render_template('category.html', category=category, items=items)
-  else:
-    return redirect(url_for('index'))
-
-@app.route('/catalog/<string:categoryName>/<string:itemName>', methods=['GET'])
-def itemListing(itemName, categoryName):
-  if request.method=='GET':
-    session = DBSession()
-    item = session.query(Item).filter_by(name=itemName).one()
-    return render_template('item.html', item=item)
-  else:
-    return redirect(url_for('index'))
-
 
 @app.route('/catalog/<string:categoryName>/<string:itemName>/edit', methods=['GET', 'POST'])
 def editItem(itemName, categoryName):
@@ -64,9 +61,7 @@ def editItem(itemName, categoryName):
   session = DBSession()
   categories = session.query(Category).order_by(Category.name).all()
   editItem = session.query(Item).filter_by(name=itemName).one()
-  if request.method=='GET':
-    return render_template('editItem.html', categories=categories, item=editItem)
-  elif request.method=='POST':
+  if request.method=='POST':
     if request.form['name']:
       editItem.name = request.form['name']
     if request.form['description']:
@@ -79,7 +74,7 @@ def editItem(itemName, categoryName):
     flash('Item, %s, edited!' % (editItem.name,))
     return redirect(url_for('itemListing', categoryName=editItem.category.name, itemName=editItem.name))
   else:
-    return redirect(url_for('index'))
+    return render_template('editItem.html', categories=categories, item=editItem)
 
 
 @app.route('/catalog/<string:categoryName>/<string:itemName>/delete', methods=['GET', 'POST'])
