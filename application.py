@@ -62,7 +62,7 @@ def itemListing(itemName, categoryName):
 def editItem(itemName, categoryName):
   """Allow logged-in users to edit an existing item"""
   session = DBSession()
-  categories = session.query(Category)
+  categories = session.query(Category).order_by(Category.name).all()
   editItem = session.query(Item).filter_by(name=itemName).one()
   if request.method=='GET':
     return render_template('editItem.html', categories=categories, item=editItem)

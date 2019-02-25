@@ -18,8 +18,11 @@
           placeholder='{{ item.description }}'>
       <p>Category:</p>
         <select name='categoryName' form='itemForm'>
+          <option value='{{ item.category.name }}'>{{ item.category.name }}</option>
           {% for category in categories %}
-          <option value='{{ category.name }}'>{{ category.name }}</option>
+            {% if category.name != item.category.name %}
+            <option value='{{ category.name }}'>{{ category.name }}</option>
+            {% endif %}
           {% endfor %}
         </select>
         <br><input type='submit' value='Edit'>
